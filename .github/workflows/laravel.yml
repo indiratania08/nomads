@@ -28,3 +28,4 @@ jobs:
         script: |
           cd /home/ubuntu/nomads
           ls -la
+          git pull origin master 

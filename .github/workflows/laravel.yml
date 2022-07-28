@@ -1,0 +1,31 @@
+name: Nomads CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+  deploy:
+    needs: [tests]
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 'SSH to PND Deploy Server'
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          cd /home/ubuntu/nomads
+          ls -la
+          git pull origin master 
